@@ -163,7 +163,22 @@ class Prof_profile extends My_Controller{
   	}
   }
   public function upl_stud(){
-  	echo "hi";
+  	$this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$number]);
   }
 }
 ?>
