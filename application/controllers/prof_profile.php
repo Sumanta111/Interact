@@ -22,7 +22,9 @@ class Prof_profile extends My_Controller{
 			$this->dashboard->follow_details($prof_id."_".$fullname);
 			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
 		}
-		$this->dashboard->store_online($prof_id,$fullname);
+		if($this->dashboard->condition_online()== 0){
+		   $this->dashboard->store_online($prof_id,$fullname);
+		}
 		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$number]);
 	}
 	public function update_info(){
@@ -73,7 +75,7 @@ class Prof_profile extends My_Controller{
 	$send_from_id=$this->session->userdata('uid');
 	$messages=$this->input->post('prof_chat');
 	$x=$this->dashboard->show_chat_name($send_to_id);
-	$send_to_name=$x->send_to_name;
+	$send_to_name=$x->name;
 	$send_from_name=$result->name;
 	$show_chat=$this->dashboard->store_chat($send_from_id,$send_to_id,$messages,$send_to_name,$send_from_name);
   	return redirect("prof_profile/chat/{$send_to_id}");

@@ -35,11 +35,11 @@ class Prof_auth extends My_Controller{
 		return redirect('prof_auth');
 	}
 	public function prof_register(){
-		$this->form_validation->set_rules('name','Name','required|alpha_numeric|max_length[30]');
+		$this->form_validation->set_rules('name','Name','required|max_length[30]');
 		$this->form_validation->set_rules('email','Email','required|max_length[40]');
-		$this->form_validation->set_rules('desg','Designation','required|alpha_numeric');
-		$this->form_validation->set_rules('work','Work','required|alpha_numeric');
-		$this->form_validation->set_rules('dept','Department','required|alpha_numeric');
+		$this->form_validation->set_rules('desg','Designation','required');
+		$this->form_validation->set_rules('work','Work','required');
+		$this->form_validation->set_rules('dept','Department','required');
 		$this->form_validation->set_rules('address','Address','required|max_length[100]');
 		$this->form_validation->set_rules('phno','Contact Details','required|max_length[10]|numeric');
 		$this->form_validation->set_rules('password','Password','required');

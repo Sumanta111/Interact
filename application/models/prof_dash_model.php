@@ -1,7 +1,7 @@
 <?php
 class Prof_dash_model extends CI_Model{
 	public function del_online(){
-		$id= $this->session->userdata('u_id');
+		$id= $this->session->userdata('uid');
 		$this->db->where('prof_id',$id)
 				 ->delete('online_prof');
 	}
@@ -45,6 +45,12 @@ class Prof_dash_model extends CI_Model{
 					->get('online_prof');
 		return $q->result();
 	}
+	public function condition_online(){
+		$id=$this->session->userdata('uid');
+		$q=$this->db->where('prof_id',$id)
+					->get('online_prof');
+		return $q->num_rows();
+	}
 	public function store_online($id,$name){
 		return $this->db->insert('online_prof',['prof_id'=>$id,'prof_name'=>$name]);
 	}
@@ -52,8 +58,9 @@ class Prof_dash_model extends CI_Model{
 		return $this->db->insert('chat',['send_from_id'=>$sendfromid,'send_to_id'=>$sendtoid,'messages'=>$msg,'send_to_name'=>$sendtoname,'send_from_name'=>$sendfromname]);
 	}
 	public function show_chat_name($id){
-		$q=$this->db->where('send_to_id',$id)
-				 ->get('chat');
+		$q=$this->db->select('name')
+					->where('u_id',$id)
+				 	->get('reg');
 		return $q->row(); 
 	}
 	public function show_chat1($send_to_id){
