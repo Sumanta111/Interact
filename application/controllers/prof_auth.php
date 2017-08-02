@@ -29,6 +29,8 @@ class Prof_auth extends My_Controller{
 		}
 	}
 	public function logout(){
+		$this->load->model('prof_dash_model');
+		$this->prof_dash_model->del_online();
 		$this->session->unset_userdata('uid');
 		return redirect('prof_auth');
 	}

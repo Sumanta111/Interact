@@ -1,5 +1,10 @@
 <?php
 class Prof_dash_model extends CI_Model{
+	public function del_online(){
+		$id= $this->session->userdata('u_id');
+		$this->db->where('prof_id',$id)
+				 ->delete('online_prof');
+	}
 	public function get_details(){
 		$id=$this->session->userdata('uid');
 		$q=$this->db->where('u_id',$id)
@@ -70,6 +75,10 @@ class Prof_dash_model extends CI_Model{
 					->limit(5)
 				 	->get();
 		return $q->result();
+	}
+	public function stud_notify($msg,$name){
+		$id=$this->session->userdata('uid');
+		return $this->db->insert('msg',['messages'=>$msg,'from_msg_id'=>$id,'from_msg_name'=>$name,'seen_unseen'=>'u']);
 	}
 }
 ?>

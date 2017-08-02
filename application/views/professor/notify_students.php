@@ -211,10 +211,10 @@ nav.navbar-webmaster span.badge.new { background: rgba(255, 0, 0, 0.8); color: #
 				</div>
 				<div class="profile-usermenu">
 					<ul class="nav">
-						<li class="active">
+						<li>
 							<?= anchor('prof_profile','&nbsp;Overview',['class'=>'glyphicon glyphicon-home']);?>
 						</li>
-						<li>
+						<li class="active">
 							<?= anchor('prof_profile/not_stud','&nbsp;Notify_Students',['class'=>'glyphicon glyphicon-user']);?>
 						</li>
 						<li>
@@ -229,56 +229,26 @@ nav.navbar-webmaster span.badge.new { background: rgba(255, 0, 0, 0.8); color: #
 		</div>
 		<div class="col-md-9">
             <div class="profile-content">
-<h3>Detailed Profile view:</h3>
-<p class="text1"><strong>Name:</strong>&nbsp&nbsp&nbsp&nbsp&nbsp<?= $res->name;?></p>
- <strong>Date of birth:</strong>&nbsp&nbsp&nbsp&nbsp&nbsp<?= $res->dob;?></p>	
-<p><strong>E-mail:</strong>&nbsp&nbsp&nbsp&nbsp&nbsp<?= $res->email;?></p>	
-   	<?= form_open('prof_profile/update_info',['class'=>'form-inline']);?>
-    <div class="form-group">
-      <label for="focusedInput">Designation</label>&nbsp&nbsp&nbsp&nbsp
-   <?php
-   $updateinp1=['type'=>'text','name'=>'desg','required'=>'','class'=>'form-control','id'=>'focusedInput','value'=>set_value('desg',$res->desg)];
-   echo form_input($updateinp1);
-   ?><?= form_submit('submit','Update Information',['class'=>'btn btn-info']);?>
-    </div>
-  <br>
-  <br>	
-    <div class="form-group">
-      <label for="focusedInput">Work In</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-   <?php
-   $updateinp2=['type'=>'text','name'=>'work','required'=>'','class'=>'form-control','id'=>'focusedInput','value'=>set_value('work',$res->work)];
-   echo form_input($updateinp2);
-   ?><?= form_submit('submit','Update Information',['class'=>'btn btn-info']);?>
-    </div>
-   <br>
-   <br>
-   <div class="form-group">
-      <label for="focusedInput">Department</label>&nbsp&nbsp&nbsp&nbsp&nbsp
-   <?php
-   $updateinp3=['type'=>'text','name'=>'dept','required'=>'','class'=>'form-control','id'=>'focusedInput','value'=>set_value('dept',$res->dept)];
-   echo form_input($updateinp3);
-   ?><?= form_submit('submit','Update Information',['class'=>'btn btn-info']);?>
-    </div>
-   <br>
-   <br>
-   <div class="form-group">
-      <label for="focusedInput">Address</label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-   <?php
-   $updateinp4=['type'=>'text','name'=>'address','required'=>'','class'=>'form-control','id'=>'focusedInput','value'=>set_value('address',$res->address)];
-   echo form_input($updateinp4);
-   ?><?= form_submit('submit','Update Information',['class'=>'btn btn-info']);?>
-    </div>
-   <br>
-   <br>
-   <div class="form-group">
-      <label for="focusedInput">Phone number</label>
-   <?php
-   $updateinp5=['type'=>'text','name'=>'phno','required'=>'','class'=>'form-control','id'=>'focusedInput','value'=>set_value('phno',$res->phno)];
-   echo form_input($updateinp5);
-   ?><?= form_submit('submit','Update Information',['class'=>'btn btn-info']);?>
-    </div>
-  <?= form_close();?>
-            </div>
+            	 <?= form_open("prof_profile/notification");?>
+				    <div class="form-group">
+				      <label for="comment">Notify Students:</label>
+				      <?php
+				      $ar1=['class'=>'form-control','rows'=>'4','id'=>'comment','name'=>'msg'];
+				      echo form_textarea($ar1);
+				      ?><?= form_error('msg');?>
+				      <br>
+				      <?= form_submit('submit','Send',['class'=>'btn btn-lg btn-success','id'=>'chatsub']);?>
+				    </div>
+				  <?= form_close();?>
+<?php if($feedback=$this->session->flashdata('feedback')): ?>
+<?php if($feedback_class=$this->session->flashdata('feedback_class')): ?>
+<div class="<?= $feedback_class ?>">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <center><strong><?= $feedback;?></strong></center>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+           		 </div>
 		</div>
   <br>
 <br>

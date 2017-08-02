@@ -105,5 +105,60 @@ class Prof_profile extends My_Controller{
 			  </div>";
   }
   }
+
+  public function not_stud(){
+  	$this->load->model('prof_dash_model','dashboard');
+	$result=$this->dashboard->get_details();
+	$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+  	$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$number]);
+  }
+
+  public function notification(){
+  	$this->load->model('prof_dash_model','dashboard');
+	$result=$this->dashboard->get_details();
+	$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+  	$this->form_validation->set_rules('msg','Notification Box','required');
+  	$this->form_validation->set_error_delimiters("<b><p class='text-danger'>","</p></b>");
+  	if($this->form_validation->run()){
+  	$msg=$this->input->post('msg');
+	$name=$result->name;
+  	if($this->dashboard->stud_notify($msg,$name)){
+  			$this->session->set_flashdata('feedback','Student Successfully Notified');
+			$this->session->set_flashdata('feedback_class','alert alert-success alert-dismissable fade in');
+  	}
+  	else{
+  			$this->session->set_flashdata('feedback','Some error Occured.Please Try Again');
+			$this->session->set_flashdata('feedback_class','alert alert-danger alert-dismissable fade in');
+  	}
+  	return redirect('prof_profile/not_stud');
+  	}
+  	else{
+  		$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$number]);
+  	}
+  }
 }
 ?>
