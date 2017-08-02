@@ -162,5 +162,8 @@ class Prof_profile extends My_Controller{
   		$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$number]);
   	}
   }
+  public function upl_stud(){
+  	echo "hi";
+  }
 }
 ?>
