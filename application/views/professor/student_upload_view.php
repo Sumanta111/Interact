@@ -230,21 +230,39 @@ nav.navbar-webmaster span.badge.new { background: rgba(255, 0, 0, 0.8); color: #
 		<div class="col-md-9">
             <div class="profile-content">
              <h3><b><i>If you want to upload anything then click below</i></b></h3>
-  <form method="post" enctype="multipart/form-data">
-  <table class="table table-condensed" style="border:5px solid green">
+             <hr>
+    <p>(*Upload limit 20MB.Allowed files are: .pdf,.doc,.txt,.jpg,.jpeg,.gif,.png)</p>
+  <?= form_open_multipart('prof_profile/upload'); ?>
+  <table class="table table-condensed">
     <tbody>
       <tr>
-        <td><input type="file" class="form-control" id="usr" name="upfile"></td>
+        <td>
+            <?php
+            echo form_upload(['name'=>'userfile','class'=>'form-control','id'=>'usr']); 
+            ?>
+        </td>
+      </tr>
+      <tr>
+        <td><?php
+              if(isset($upload_error)){
+                 echo "<div class='alert alert-danger alert-dismissable fade in' style='height:50px'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times</a><center><strong>$upload_error</strong></center></div>";
+              }?>
+        </td>
       </tr>
       <tr>
         <td><input type="submit" class="form-control btn btn-success" id="usr" name="up" value="upload"></td>
       </tr>
-      <tr>
-        <td><input type="submit" class="form-control btn btn-info" id="usr" name="info" value="file info"></td>
-      </tr>
     </tbody>
   </table>
-</form>
+<?= form_close(); ?>
+<?php if($feedback=$this->session->flashdata('feedback')): ?>
+<?php if($feedback_class=$this->session->flashdata('feedback_class')): ?>
+<div class="<?= $feedback_class ?>">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <center><strong><?= $feedback;?></strong></center>
+</div>
+<?php endif; ?>
+<?php endif; ?>
             </div>
 		</div>
   <br>

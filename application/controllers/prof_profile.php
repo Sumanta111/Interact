@@ -25,6 +25,9 @@ class Prof_profile extends My_Controller{
 		if($this->dashboard->condition_online()== 0){
 		   $this->dashboard->store_online($prof_id,$fullname);
 		}
+		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$prof_id."_".$firstname)){
+				mkdir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$prof_id."_".$firstname);
+		}
 		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$number]);
 	}
 	public function update_info(){
@@ -50,7 +53,22 @@ class Prof_profile extends My_Controller{
 		return redirect('prof_profile');
 	}
 	else{
-		$this->load->view('professor/prof_dashboard');
+		$this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$number]);
 	}
   }
   public function online(){
@@ -179,6 +197,42 @@ class Prof_profile extends My_Controller{
 			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
 		}
 		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$number]);
+  }
+  public function upload(){
+  	$this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+  	$config=[
+  				'upload_path' => "upload/$prof_id"."_".$firstname."/",
+  				'allowed_types' => 'jpg|jpeg|png|gif|pdf|doc|txt',
+  				'max_size' => '20480'
+  			];
+    	
+  	$this->load->library('upload',$config);
+  	if($this->upload->do_upload()){
+  		$data=$this->upload->data();
+  		//$upload_path=base_url("upload/".$data['raw_name'].$data['file_ext']);
+  		//echo $upload_path;exit;
+  		$this->session->set_flashdata('feedback','File Successfully Uploaded');
+		$this->session->set_flashdata('feedback_class','alert alert-success alert-dismissable fade in');
+  		return redirect('prof_profile/upl_stud');
+  	}
+  	else{
+  		$upload_error=$this->upload->display_errors();
+  		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$number,'upload_error'=>$upload_error]);
+  	}
   }
 }
 ?>
