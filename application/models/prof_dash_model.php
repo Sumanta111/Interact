@@ -87,5 +87,34 @@ class Prof_dash_model extends CI_Model{
 		$id=$this->session->userdata('uid');
 		return $this->db->insert('msg',['messages'=>$msg,'from_msg_id'=>$id,'from_msg_name'=>$name,'seen_unseen'=>'u']);
 	}
+	public function prev_msg_person($limit,$offset){
+		$id=$this->session->userdata('uid');
+		$flag=1;
+		$q=$this->db->select(['send_to_name','send_to_id'])
+				 ->distinct([$flag])
+				 ->where('send_from_id',$id)
+				 ->limit($limit,$offset)
+				 ->get('chat');
+		return $q->result();
+	}
+	public function prev_msg_person_num(){
+		$id=$this->session->userdata('uid');
+		$flag=1;
+		$q=$this->db->select(['send_to_name','send_to_id'])
+				 ->distinct([$flag])
+				 ->where('send_from_id',$id)
+				 ->get('chat');
+		return $q->num_rows();
+	}
+	public function prev_msg_chat($send_to_id,$limit,$offset){
+		$send_from_id=$this->session->userdata('uid');
+		$q=$this->db->query("(select * from chat where send_from_id=$send_from_id AND send_to_id=$send_to_id) UNION (select * from chat where send_from_id=$send_to_id AND send_to_id=$send_from_id) ORDER BY message_id asc LIMIT $limit OFFSET $offset;");
+		return $q->result();
+	}
+	public function prev_msg_chat_num($send_to_id){
+		$send_from_id=$this->session->userdata('uid');
+		$q=$this->db->query("(select * from chat where send_from_id=$send_from_id AND send_to_id=$send_to_id) UNION (select * from chat where send_from_id=$send_to_id AND send_to_id=$send_from_id) ORDER BY message_id asc;");
+		return $q->num_rows();
+	}
 }
 ?>

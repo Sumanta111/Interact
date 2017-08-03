@@ -234,5 +234,79 @@ class Prof_profile extends My_Controller{
   		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$number,'upload_error'=>$upload_error]);
   	}
   }
+  public function msg_hist(){
+  	$this->load->library('pagination');
+  	$this->load->model('prof_dash_model','dashboard');
+		$config=[
+					'base_url'  => base_url("index.php/prof_profile/msg_hist"),
+					'per_page'  => 5,
+					'total_rows' =>$this->dashboard->prev_msg_person_num(),
+					'full_tag_open' => "<ul class='pagination'>",
+					'full_tag_close'=> '</ul>',
+					'next_tag_open' => '<li>',
+					'next_tag_close' => '</li>',
+					'prev_tag_open'  =>'<li>',
+					'prev_tag_close'  =>'</li>',
+					'num_tag_open'  =>'<li>',
+					'num_tag_close' =>'</li>',
+					'cur_tag_open' =>"<li class='active'><a>",
+					'cur_tag_close'=>'</a></li>'
+				];
+		$this->pagination->initialize($config);
+		$result=$this->dashboard->get_details();
+		$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+		$prev=$this->dashboard->prev_msg_person($config['per_page'],$this->uri->segment(3,0));
+		$this->load->view('professor/prof_msg_hist',['res'=>$result,'follow_num'=>$number,'chat_person'=>$prev]);
+  }
+  public function prev_msg($send_to_id){
+  	$this->load->library('pagination');
+  	$this->load->model('prof_dash_model','dashboard');
+		$config=[
+					'base_url'  => base_url("index.php/prof_profile/prev_msg/$send_to_id"),
+					'per_page'  => 5,
+					'total_rows' =>$this->dashboard->prev_msg_chat_num($send_to_id),
+					'uri_segment' =>4,
+					'full_tag_open' => "<ul class='pagination'>",
+					'full_tag_close'=> '</ul>',
+					'next_tag_open' => '<li>',
+					'next_tag_close' => '</li>',
+					'prev_tag_open'  =>'<li>',
+					'prev_tag_close'  =>'</li>',
+					'num_tag_open'  =>'<li>',
+					'num_tag_close' =>'</li>',
+					'cur_tag_open' =>"<li class='active'><a>",
+					'cur_tag_close'=>'</a></li>'
+				];
+		$this->pagination->initialize($config);
+		$msg=$this->dashboard->prev_msg_chat($send_to_id,$config['per_page'],$this->uri->segment(4,0));
+  		
+		$result=$this->dashboard->get_details();
+		$prof_id=$result->u_id;
+		$fullname=$result->name;
+		$parts=explode(" ",$fullname);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!= NULL){
+			$this->dashboard->follow_details($prof_id."_".$firstname);
+			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		}
+		else{
+			$this->dashboard->follow_details($prof_id."_".$fullname);
+			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+		}
+  	$this->load->view('professor/prof_msg_view',['res'=>$result,'follow_num'=>$number,'msg'=>$msg]);
+  }
 }
 ?>
