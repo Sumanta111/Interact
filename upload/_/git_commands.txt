@@ -1,0 +1,23 @@
+1.git clone ..................(url)....................
+
+2.git status    ->git hub has no clue file exist
+
+3.git add index.html    ->index.html new file
+
+4. git commit -m "added index.html"    ->-m for message
+
+5.git push
+
+
+===============================================================
+//other guy
+
+1.git pull
+
+2.git status
+
+3.(git add . )or (git add -A)
+
+4.git commit -m "made changes"
+
+5.git push

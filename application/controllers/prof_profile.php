@@ -6,29 +6,36 @@ class Prof_profile extends My_Controller{
 			return redirect('prof_auth');
 		}
 	}
-	public function index(){
+	private function _profcred(){
 		$this->load->model('prof_dash_model','dashboard');
 		$result=$this->dashboard->get_details();
-		$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
+		$data['prof_id']=$result->u_id;
+		$data['fullname']=$result->name;
+		$data['parts']=explode(" ",$data['fullname']);
+		$data['lastname']=array_pop($data['parts']);
+		$data['firstname']=implode(" ", $data['parts']);
+		if($data['firstname']!= NULL){
+			$this->dashboard->follow_details($data['prof_id']."_".$data['firstname']);
+			$data['number']=$this->dashboard->follow_number($data['prof_id']."_".$data['firstname']);
 		}
 		else{
 			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
+			$data['number']=$this->dashboard->follow_number($prof_id."_".$fullname);
 		}
+
+		return $data;
+	}
+	public function index(){
+		$this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$data=$this->_profcred();
 		if($this->dashboard->condition_online()== 0){
-		   $this->dashboard->store_online($prof_id,$fullname);
+		   $this->dashboard->store_online($data['prof_id'],$data['fullname']);
 		}
-		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$prof_id."_".$firstname)){
-				mkdir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$prof_id."_".$firstname);
+		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$data['prof_id']."_".$data['firstname'])){
+				mkdir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$data['prof_id']."_".$data['firstname']);
 		}
-		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$number]);
+		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$data['number']]);
 	}
 	public function update_info(){
 		$this->form_validation->set_rules('desg','Designation','required|alpha_numeric');
@@ -55,20 +62,8 @@ class Prof_profile extends My_Controller{
 	else{
 		$this->load->model('prof_dash_model','dashboard');
 		$result=$this->dashboard->get_details();
-		$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
-		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$number]);
+		$data=$this->_profcred();
+		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$data['number']]);
 	}
   }
   public function online(){
@@ -127,40 +122,16 @@ class Prof_profile extends My_Controller{
   }
 
   public function not_stud(){
-  	$this->load->model('prof_dash_model','dashboard');
-	$result=$this->dashboard->get_details();
-	$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
-  	$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$number]);
+ 	 $this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$data=$this->_profcred();
+  	$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$data['number']]);
   }
 
   public function notification(){
   	$this->load->model('prof_dash_model','dashboard');
-	$result=$this->dashboard->get_details();
-	$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
+		$result=$this->dashboard->get_details();
+		$data=$this->_profcred();
   	$this->form_validation->set_rules('msg','Notification Box','required');
   	$this->form_validation->set_error_delimiters("<b><p class='text-danger'>","</p></b>");
   	if($this->form_validation->run()){
@@ -177,43 +148,19 @@ class Prof_profile extends My_Controller{
   	return redirect('prof_profile/not_stud');
   	}
   	else{
-  		$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$number]);
+  		$this->load->view('professor/notify_students',['res'=>$result,'follow_num'=>$data['number']]);
   	}
   }
   public function upl_stud(){
-  	$this->load->model('prof_dash_model','dashboard');
+  		$this->load->model('prof_dash_model','dashboard');
 		$result=$this->dashboard->get_details();
-		$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
-		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$number]);
+		$data=$this->_profcred();
+		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$data['number']]);
   }
   public function upload(){
   	$this->load->model('prof_dash_model','dashboard');
 		$result=$this->dashboard->get_details();
-		$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
+		$data=$this->_profcred();
   	$config=[
   				'upload_path' => "upload/$prof_id"."_".$firstname."/",
   				'allowed_types' => 'jpg|jpeg|png|gif|pdf|doc|txt',
@@ -231,12 +178,14 @@ class Prof_profile extends My_Controller{
   	}
   	else{
   		$upload_error=$this->upload->display_errors();
-  		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$number,'upload_error'=>$upload_error]);
+  		$this->load->view('professor/student_upload_view',['res'=>$result,'follow_num'=>$data['number'],'upload_error'=>$upload_error]);
   	}
   }
   public function msg_hist(){
   	$this->load->library('pagination');
   	$this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$data=$this->_profcred();
 		$config=[
 					'base_url'  => base_url("index.php/prof_profile/msg_hist"),
 					'per_page'  => 5,
@@ -253,26 +202,14 @@ class Prof_profile extends My_Controller{
 					'cur_tag_close'=>'</a></li>'
 				];
 		$this->pagination->initialize($config);
-		$result=$this->dashboard->get_details();
-		$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
 		$prev=$this->dashboard->prev_msg_person($config['per_page'],$this->uri->segment(3,0));
-		$this->load->view('professor/prof_msg_hist',['res'=>$result,'follow_num'=>$number,'chat_person'=>$prev]);
+		$this->load->view('professor/prof_msg_hist',['res'=>$result,'follow_num'=>$data['number'],'chat_person'=>$prev]);
   }
   public function prev_msg($send_to_id){
   	$this->load->library('pagination');
   	$this->load->model('prof_dash_model','dashboard');
+		$result=$this->dashboard->get_details();
+		$data=$this->_profcred();
 		$config=[
 					'base_url'  => base_url("index.php/prof_profile/prev_msg/$send_to_id"),
 					'per_page'  => 5,
@@ -291,22 +228,7 @@ class Prof_profile extends My_Controller{
 				];
 		$this->pagination->initialize($config);
 		$msg=$this->dashboard->prev_msg_chat($send_to_id,$config['per_page'],$this->uri->segment(4,0));
-  		
-		$result=$this->dashboard->get_details();
-		$prof_id=$result->u_id;
-		$fullname=$result->name;
-		$parts=explode(" ",$fullname);
-		$lastname=array_pop($parts);
-		$firstname=implode(" ", $parts);
-		if($firstname!= NULL){
-			$this->dashboard->follow_details($prof_id."_".$firstname);
-			$number=$this->dashboard->follow_number($prof_id."_".$firstname);
-		}
-		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$number=$this->dashboard->follow_number($prof_id."_".$fullname);
-		}
-  	$this->load->view('professor/prof_msg_view',['res'=>$result,'follow_num'=>$number,'msg'=>$msg]);
+  	$this->load->view('professor/prof_msg_view',['res'=>$result,'follow_num'=>$data['number'],'msg'=>$msg]);
   }
 }
 ?>
