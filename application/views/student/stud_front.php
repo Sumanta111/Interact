@@ -2,6 +2,21 @@
 <!DOCTYPE html>
 <html>
 <body>
+  <?php if($error=$this->session->flashdata('login_failed')): ?>
+<div class="container-fluid" style="height:30px;background-color:red;color:white;text-align:center;font-size:20px;margin-top:-20px">
+<?= $error;?>
+</div>
+<?php endif;?>
+<?php if($feedback=$this->session->flashdata('feedback')): ?>
+  <?php if($feedback_class=$this->session->flashdata('feedback_class')): ?>
+<div class="<?= $feedback_class ?>">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  <center><strong><?= $feedback;?></strong></center>
+</div>
+<?php endif; ?>
+<?php endif; ?>
+
+
 <div id="band" class="container text-center">
   <div class="panel-group">
   <div class="panel panel-success">

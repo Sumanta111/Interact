@@ -35,7 +35,7 @@ body{
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Register</b> <span class="caret"></span></a>
 			<ul id="login-dp" class="dropdown-menu" style="width: 600px;">
 				<li>
-					<form class="form-horizontal" method="post" action="st_reg.php">
+            <?= form_open('stud_auth/stud_register',['class'=>'form-horizontal','role'=>'form','accept-charset'=>'UTF-8']);?>
 <fieldset>
 
 <!-- Form Name -->
@@ -45,8 +45,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="name">Name</label>
   <div class="col-md-4">
-  <input id="name" name="name" type="text" placeholder="Enter your name" class="form-control input-md" required="">
-
+  <?php
+  	$inp1=array('id'=>'name','name'=>'name','type'=>'text','placeholder'=>'Enter your name','class'=>'form-control input-md','value'=>set_value('name'));
+    echo form_input($inp1);
+    echo form_error('name');
+  ?>
   </div>
 </div>
 
@@ -54,7 +57,10 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="email">DOB</label>
   <div class="col-md-4">
-  <input id="email" type="date" name="dob" placeholder="Enter your date of Birth" class="form-control input-md" required="">
+  <?php
+    $inp2=array('id'=>'email','name'=>'dob','type'=>'date','class'=>'form-control input-md');
+    echo form_input($inp2);
+  ?>
 
   </div>
 </div>
@@ -63,8 +69,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">Email</label>
   <div class="col-md-4">
-  <input id="contact" type="email" name="email" placeholder="Enter your Email here" class="form-control input-md" required="">
-
+  <?php
+    $inp3=array('id'=>'contact','name'=>'email','type'=>'email','placeholder'=>'Enter your Email here','class'=>'form-control input-md','value'=>set_value('email'));
+    echo form_input($inp3);
+    echo form_error('email');
+  ?>
   </div>
 </div>
 
@@ -72,14 +81,18 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">Branch</label>
   <div class="col-md-4">
-  <input id="contact" type="text" name="branch" placeholder="Enter your branch" class="form-control input-md" required="">
+  <?php
+    $inp4=array('id'=>'contact','name'=>'branch','type'=>'text','placeholder'=>'Enter your branch','class'=>'form-control input-md','value'=>set_value('branch'));
+    echo form_input($inp4);
+    echo form_error('branch');
+  ?>
   </div>
 </div>
 
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">Year</label>
   <div class="col-md-4">
-		<input type="radio" name="year"/>1st Year<br />
+		<input type="radio" name="year" checked=""/>1st Year<br />
 				<input type="radio" name="year"/>2ndYear<br />
 				<input type="radio" name="year"/>3rd Year<br />
 				<input type="radio" name="year"/>4th Year<br />
@@ -90,7 +103,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">University Roll No</label>
   <div class="col-md-4">
-  <input id="contact" type="text" name="urollno" placeholder="Enter university roll no" class="form-control input-md" required="">
+  <?php
+    $inp5=array('id'=>'contact','name'=>'unirollno','type'=>'text','placeholder'=>'Enter university rollno','class'=>'form-control input-md','value'=>set_value('unirollno'));
+    echo form_input($inp5);
+    echo form_error('unirollno');
+  ?>
   </div>
 </div>
 
@@ -98,7 +115,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">College Roll No</label>
   <div class="col-md-4">
-  <input id="contact" type="text" name="clgrollno" placeholder="Enter college roll no" class="form-control input-md" required="">
+  <?php
+    $inp6=array('id'=>'contact','name'=>'clgrollno','type'=>'text','placeholder'=>'Enter college rollno','class'=>'form-control input-md','value'=>set_value('clgrollno'));
+    echo form_input($inp6);
+    echo form_error('clgrollno');
+  ?>
   </div>
 </div>
 
@@ -106,7 +127,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">Address</label>
   <div class="col-md-4">
-  <textarea id="contact" name="address" required=""></textarea>
+  <?php
+    $inp7=array('id'=>'contact','name'=>'address','placeholder'=>'Enter your address','value'=>set_value('address'));
+    echo form_textarea($inp7);
+    echo form_error('address');
+  ?>
   </div>
 </div>
 
@@ -114,7 +139,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="contact">Contact No</label>
   <div class="col-md-4">
-  <input id="contact" type="text" name="phno"  class="form-control input-md" required="">
+  <?php
+    $inp8=array('id'=>'contact','name'=>'phno','type'=>'text','placeholder'=>'Enter your Phno','class'=>'form-control input-md','value'=>set_value('phno'));
+    echo form_input($inp8);
+    echo form_error('phno');
+  ?>
   </div>
 </div>
 
@@ -123,7 +152,11 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="password">Password</label>
   <div class="col-md-4">
-    <input id="password" type="password" name="passwd" placeholder="Enter a password" class="form-control input-md" required="">
+    <?php
+    $inp9=array('id'=>'password','name'=>'password','type'=>'password','placeholder'=>'Enter a password','class'=>'form-control input-md');
+    echo form_input($inp9);
+    echo form_error('password');
+  ?>
 
   </div>
 </div>
@@ -131,12 +164,12 @@ body{
 <div class="form-group">
   <label class="col-md-4 control-label" for="signup"></label>
   <div class="col-md-4">
-    <button id="signup" name="register" class="btn btn-success">Sign Up</button>
+    <?= form_submit('register','Register',['class'=>'btn btn-success','id'=>'signup']); ?>
   </div>
 </div>
 
 </fieldset>
-</form>
+<?= form_close();?>
 				</li>
 			</ul>
         </li>
@@ -147,25 +180,32 @@ body{
 					 <div class="row">
 							<div class="col-md-12">
 								Login
-								 <form class="form" role="form"  accept-charset="UTF-8" id="login-nav" method="post" action="st_auth.php">
+                <?= form_open('stud_auth/stud_login',['class'=>'form','id'=>'login-nav','role'=>'form','accept-charset'=>'UTF-8']); ?>
 										<div class="form-group">
 											 <label class="sr-only" for="exampleInputEmail2">Email address</label>
-											 <input type="email" name="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required>
+                       <?php
+                        $logininp1=['type'=>'email','name'=>'em','class'=>'form-control','id'=>'exampleInputEmail2','placeholder'=>'Email address please','value'=>set_value('em')];
+                      echo form_input($logininp1);
+                      echo form_error('em');
+                      ?>
 										</div>
 										<div class="form-group">
 											 <label class="sr-only" for="exampleInputPassword2">Password</label>
-											 <input type="password" name="passwd" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
-
+                       <?php
+                        $logininp2=['type'=>'password','name'=>'passwd','class'=>'form-control','id'=>'exampleInputEmail2','placeholder'=>'Password please'];
+                      echo form_input($logininp2);
+                      echo form_error('passwd');
+                      ?>
 										</div>
 										<div class="form-group">
-											 <button type="submit" name="submit" class="btn btn-primary btn-block">Sign in</button>
+                        <?= form_submit('submit','Sign In',['class'=>'btn btn-primary btn-block']); ?>
 										</div>
 										<div class="checkbox">
 											 <label>
 											 <input type="checkbox"> keep me logged-in
 											 </label>
 										</div>
-								 </form>
+                    <?= form_close();?>
 							</div>
 							<div class="bottom text-center">
 								New here ? Please Register!
