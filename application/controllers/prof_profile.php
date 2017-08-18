@@ -168,12 +168,23 @@ class Prof_profile extends My_Controller{
   	$this->load->model('prof_dash_model','dashboard');
 		$result=$this->dashboard->get_details();
 		$data=$this->_profcred();
-  	$config=[
-  				'upload_path' => "upload/$prof_id"."_".$firstname."/",
+		$prof_id=$data['prof_id'];
+		$firstname=$data['firstname'];
+		$fullname=$data['fullname'];
+		if($data['firstname']!= NULL){
+			$config=[
+  				'upload_path' => "upload/$prof_id"."_"."$firstname",
   				'allowed_types' => 'jpg|jpeg|png|gif|pdf|doc|txt',
   				'max_size' => '20480'
   			];
-    	
+		}
+		else{
+			$config=[
+  				'upload_path' => "upload/$prof_id"."_"."$fullname",
+  				'allowed_types' => 'jpg|jpeg|png|gif|pdf|doc|txt',
+  				'max_size' => '20480'
+  			];
+		}
   	$this->load->library('upload',$config);
   	if($this->upload->do_upload()){
   		$data=$this->upload->data();

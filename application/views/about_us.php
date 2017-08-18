@@ -42,7 +42,7 @@ nav.navbar-webmaster span.badge.new { background: rgba(255, 0, 0, 0.8); color: #
 	 	width: 200px;
 	 	outline: 0px solid red;
 	 	left: 150px;
-	 	background-image: url('../../Images/default_guy.png');
+	 	background-image: url('../../Images/sumanta.jpg');
 	 	border-radius: 50%;
 	 	background-position: center;
 	 	background-size: contain;
@@ -67,7 +67,7 @@ nav.navbar-webmaster span.badge.new { background: rgba(255, 0, 0, 0.8); color: #
 	 	width: 200px;
 	 	outline: 0px solid red;
 	 	left: 750px;
-	    background-image: url('../../Images/sub.jpeg');
+	    background-image: url('../../Images/subhadeep.jpg');
 	 	border-radius: 50%;
 	 	background-position: center;
 	 	background-size: cover;
