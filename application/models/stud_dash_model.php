@@ -6,10 +6,17 @@ class Stud_dash_model extends CI_Model{
 					->get('streg');
 		return $q->row()->name;
 	}
-	public function getProfessor(){
+	public function getProfessor($limit,$offset){
 		$q=$this->db->select(['u_id','name','desg','work'])
+					->order_by('name','ASC')
+					->limit($limit,$offset)
 		            ->get('reg');
 		return $q->result();
+	}
+	public function getNumProf(){
+		$q=$this->db->select('u_id')
+		            ->get('reg');
+		return $q->num_rows();
 	}
 	public function getFollow($table_name){
 		$q=$this->db->get("$table_name");

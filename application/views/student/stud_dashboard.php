@@ -106,6 +106,10 @@ button:hover, a:hover {
     padding-top: 16px;
     padding-right: 6px;
 }
+.page{
+  position: relative;
+  float: right;
+}
 
 	</style>
 	<body>
@@ -152,13 +156,13 @@ button:hover, a:hover {
 </div>
 <?php endif; ?>
 <?php endif; ?>
-
+<div class="container-fluid">
 <?php foreach($prof as $professor) : ?>
 
 <div class="card">
   <img src="<?= base_url('Images/default_guy.png');?>" style="width:100%;height:250px;">
   <div class="container-fluid">
-    <a href="#" target="_self"><h3><strong><?= $professor->name?></strong></h3></a>
+    <?= anchor("stud_profile/download/{$professor->u_id}","<h3><strong>$professor->name</strong></h3>",['target'=>'_self']);?>
     <p class="title"><?= $professor->desg;?></p>
     <p><?= $professor->work;?></p><div style="margin: 24px 0;">
       <a href="#" style="text-decoration: none;font-size: 22px;color: black;"><i class="fa fa-dribbble"></i></a> 
@@ -167,6 +171,13 @@ button:hover, a:hover {
       <a href="#" style="text-decoration: none;font-size: 22px;color: black;"><i class="fa fa-facebook"></i></a>
       </div><p><?= anchor("stud_profile/follow/{$professor->u_id}",'Follow',['class'=>'btn1']);?><?= anchor("stud_profile/unfollow/{$professor->u_id}",'Unfollow',['class'=>'btn1']);?></p></div></div>
 
-<?php endforeach; ?>
+<?php endforeach; ?> 
+</div>
+<div class="container">
+<div class="page">
+   <?= $this->pagination->create_links();?>
+</div>
+</div>
+
 	</body>
 </html>

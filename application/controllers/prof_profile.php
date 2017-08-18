@@ -19,8 +19,8 @@ class Prof_profile extends My_Controller{
 			$data['number']=$this->dashboard->follow_number($data['prof_id']."_".$data['firstname']);
 		}
 		else{
-			$this->dashboard->follow_details($prof_id."_".$fullname);
-			$data['number']=$this->dashboard->follow_number($prof_id."_".$fullname);
+			$this->dashboard->follow_details($data['prof_id']."_".$data['fullname']);
+			$data['number']=$this->dashboard->follow_number($data['prof_id']."_".$data['fullname']);
 		}
 
 		return $data;
@@ -32,9 +32,16 @@ class Prof_profile extends My_Controller{
 		if($this->dashboard->condition_online()== 0){
 		   $this->dashboard->store_online($data['prof_id'],$data['fullname']);
 		}
+		if($data['firstname']!=NULL){
 		if(!is_dir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$data['prof_id']."_".$data['firstname'])){
 				mkdir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$data['prof_id']."_".$data['firstname']);
 		}
+	    }
+	    else{
+	    if(!is_dir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$data['prof_id']."_".$data['fullname'])){
+				mkdir($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$data['prof_id']."_".$data['fullname']);
+		 }	
+	    }
 		$this->load->view('professor/prof_dashboard',['res'=>$result,'follow_num'=>$data['number']]);
 	}
 	public function update_info(){

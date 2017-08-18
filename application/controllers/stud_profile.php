@@ -8,9 +8,26 @@ class Stud_profile extends My_Controller{
 	}
 	public function index(){
 		$this->load->model('stud_dash_model');
+		$this->load->library('pagination');
+		$config=[
+					'base_url'  => base_url("index.php/stud_profile/index"),
+					'per_page'  => 8,
+					'total_rows' =>$this->stud_dash_model->getNumProf(),
+					'full_tag_open' => "<ul class='pagination'>",
+					'full_tag_close'=> '</ul>',
+					'next_tag_open' => '<li>',
+					'next_tag_close' => '</li>',
+					'prev_tag_open'  =>'<li>',
+					'prev_tag_close'  =>'</li>',
+					'num_tag_open'  =>'<li>',
+					'num_tag_close' =>'</li>',
+					'cur_tag_open' =>"<li class='active'><a>",
+					'cur_tag_close'=>'</a></li>'
+				];
+		$this->pagination->initialize($config);
 		$st_id=$this->session->userdata('stid');
 		$name=$this->stud_dash_model->getName();
-		$prof_info=$this->stud_dash_model->getProfessor();
+		$prof_info=$this->stud_dash_model->getProfessor($config['per_page'],$this->uri->segment(3));
 		$this->load->view('student/stud_dashboard',['name'=>$name,'prof'=>$prof_info]);
 	}
 
@@ -18,8 +35,25 @@ class Stud_profile extends My_Controller{
 		$this->load->model('stud_dash_model');
 		$st_id=$this->session->userdata('stid');
 		$name=$this->stud_dash_model->getName();
-		$prof_info=$this->stud_dash_model->getProfessor();
-		//print_r($prof_info);exit;
+
+		$this->load->library('pagination');
+		$config=[
+					'base_url'  => base_url("index.php/stud_profile/index"),
+					'per_page'  => 8,
+					'total_rows' =>$this->stud_dash_model->getNumProf(),
+					'full_tag_open' => "<ul class='pagination'>",
+					'full_tag_close'=> '</ul>',
+					'next_tag_open' => '<li>',
+					'next_tag_close' => '</li>',
+					'prev_tag_open'  =>'<li>',
+					'prev_tag_close'  =>'</li>',
+					'num_tag_open'  =>'<li>',
+					'num_tag_close' =>'</li>',
+					'cur_tag_open' =>"<li class='active'><a>",
+					'cur_tag_close'=>'</a></li>'
+				];
+		$this->pagination->initialize($config);
+		$prof_info=$this->stud_dash_model->getProfessor($config['per_page'],$this->uri->segment(3,0));
 		$flag=false;
 		foreach ($prof_info as $i) {
 			$full_name = $i->name;
@@ -88,7 +122,7 @@ class Stud_profile extends My_Controller{
 				$table_name=$user_id."_".$firstname;
 			}
 			else{
-				$table_name=$user_id."_".$full_name;	
+				$table_name=$user_id."_".$prof_name;	
 			}
 		$follower_name=$this->stud_dash_model->getName();
 		$count=$this->stud_dash_model->cond($table_name);
@@ -116,7 +150,7 @@ class Stud_profile extends My_Controller{
 				$table_name=$user_id."_".$firstname;
 			}
 			else{
-				$table_name=$user_id."_".$full_name;	
+				$table_name=$user_id."_".$prof_name;	
 			}
 		$follower_name=$this->stud_dash_model->getName();
 		$count=$this->stud_dash_model->cond($table_name);
@@ -135,6 +169,38 @@ class Stud_profile extends My_Controller{
 
 	}
 
+	public function download($user_id){
+		$this->load->helper('directory');
+		$this->load->model('stud_dash_model');
+		$full_name=$this->stud_dash_model->get_prof_name($user_id);
+		$parts =explode(" ",$full_name);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!=null){
+				$folder_name=$user_id."_".$firstname;
+			}
+			else{
+				$folder_name=$user_id."_".$full_name;	
+			}
+		$dir_map=directory_map($_SERVER['DOCUMENT_ROOT']."/Interact/upload/".$folder_name);
+		$this->load->view('student/stud_download',['files'=>$dir_map,'user_id'=>$user_id]);
+	}
+	public function download_func($file_name=null,$user_id){
+		$this->load->helper('download');
+		$this->load->model('stud_dash_model');
+		$full_name=$this->stud_dash_model->get_prof_name($user_id);
+		$parts =explode(" ",$full_name);
+		$lastname=array_pop($parts);
+		$firstname=implode(" ", $parts);
+		if($firstname!=null){
+				$folder_name=$user_id."_".$firstname;
+			}
+			else{
+				$folder_name=$user_id."_".$full_name;	
+			}
+		$data=file_get_contents(base_url('/upload/'.$folder_name.'/'.$file_name));
+		force_download($file_name, $data);
+	}
 
 
 
